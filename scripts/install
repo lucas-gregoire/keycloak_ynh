@@ -25,7 +25,8 @@ ynh_abort_if_errors
 #=================================================
 
 domain=$YNH_APP_ARG_DOMAIN
-
+username=$YNH_APP_ARG_USERNAME
+userpassword=$YNH_APP_ARG_USERPASSWORD
 app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
@@ -36,20 +37,8 @@ ynh_script_progression --message="Validating installation parameters..."
 config_path=/etc/$app
 test ! -e "$config_path" || ynh_die "This path already contains a folder"
 
-# Detect the system architecture
-if [ -n "$(uname -m | grep 64)" ]; then
-	architecture="x86-64"
-elif [ -n "$(uname -m | grep 86)" ]; then
-	architecture="i386"
-elif [ -n "$(uname -m | grep arm)" ]; then
-	architecture="arm"
-else
-	ynh_die "Unable to detect your achitecture, please open a bug describing \
-        your hardware and the result of the command \"uname -m\"." 1
-fi
-
-# By default, the runner will use docker to run your builds. PR are welcomes to implement more executors
 port=$(ynh_find_port 31000)
+rootpassword=$(ynh_string_random --length=12)
 
 ynh_webpath_available $domain "/"
 ynh_webpath_register $app $domain "/"
@@ -60,7 +49,8 @@ ynh_webpath_register $app $domain "/"
 ynh_script_progression --message="Storing installation settings..."
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=architecture --value=$architecture
+ynh_app_setting_set --app=$app --key=userpassword --value=$userpassword
+ynh_app_setting_set --app=$app --key=username --value=$username
 ynh_app_setting_set --app=$app --key=config_path --value=$config_path
 ynh_app_setting_set --app=$app --key=port --value=$port
 
@@ -91,20 +81,20 @@ mkdir -p $config_path
 
 dockerapp_ynh_findreplaceallvaribles
 
-cp ../conf/docker-compose.yml $config_path
+cp ../conf/docker-compose.yml $config_path/docker-compose.yml
+cp ../conf/env.example $config_path/.env
 
 #=================================================
 # START KEYCLOAK
 #=================================================
-# ynh_script_progression --message="Starting Keycloak..."
-# 
-# pushd $config_path
-# 
-# docker-compose up -d
-# 
-# popd
-# 
-# 
+ynh_script_progression --message="Starting Keycloak..."
+
+pushd $config_path
+
+docker-compose up -d
+
+popd
+
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
@@ -115,7 +105,9 @@ ynh_add_nginx_config
 
 yunohost service add $app
 
-ynh_app_setting_set $app skipped_uris "/"
+ynh_permission_update --permission "main" --add visitors
+
+ynh_permission_create --permission "admin" --url "/auth/admin/" --allowed all_users --label "Restricted access zone"
 
 #=================================================
 # END OF SCRIPT

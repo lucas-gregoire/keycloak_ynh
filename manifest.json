@@ -30,6 +30,23 @@
                     "fr": "Choisissez un domaine pour Keycloak"
                 },
                 "example": "example.org"
+            },
+            {
+                "name": "username",
+                "type": "string",
+                "ask": {
+                    "en": "Choose an admin user name",
+                    "fr": "Choisissez un nom d'administrateur"
+                },
+                "example": "john"
+            },
+            {
+                "name": "userpassword",
+                "type": "password",
+                "ask": {
+                    "en": "Choose an admin password",
+                    "fr": "Choisissez le mot de passe administrateur"
+                }
             }
         ]
     }
