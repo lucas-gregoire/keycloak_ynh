@@ -86,6 +86,10 @@ fi
 #=================================================
 ynh_script_progression --message="Setting up files..."
 
+mkdir -p $config_path
+
+dockerapp_ynh_findreplaceallvaribles
+
 cp ../conf/docker-compose.yml $config_path
 
 #=================================================
