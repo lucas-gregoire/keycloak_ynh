@@ -111,9 +111,7 @@ dockerapp_ynh_findreplacepath () {
 # find replace all variables
 dockerapp_ynh_findreplaceallvaribles () {
 	dockerapp_ynh_findreplacepath "YNH_APP" "$app"
-    dockerapp_ynh_findreplacepath "YNH_DATA" "$data_path"
     dockerapp_ynh_findreplacepath "YNH_PORT" "$port"
-	bash docker/_specificvariablesapp.sh
 }
 
 #=================================================
