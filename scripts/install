@@ -91,15 +91,15 @@ cp ../conf/docker-compose.yml $config_path
 #=================================================
 # START KEYCLOAK
 #=================================================
-ynh_script_progression --message="Starting Keycloak..."
-
-pushd $config_path
-
-docker-compose up -d
-
-popd
-
-
+# ynh_script_progression --message="Starting Keycloak..."
+# 
+# pushd $config_path
+# 
+# docker-compose up -d
+# 
+# popd
+# 
+# 
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
