@@ -1,0 +1,115 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+ynh_clean_setup () {
+	### Remove this function if there's nothing to clean before calling the remove script.
+	true
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
+
+domain=$YNH_APP_ARG_DOMAIN
+
+app=$YNH_APP_INSTANCE_NAME
+
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+ynh_script_progression --message="Validating installation parameters..."
+
+config_path=/etc/$app
+test ! -e "$config_path" || ynh_die "This path already contains a folder"
+
+# Detect the system architecture
+if [ -n "$(uname -m | grep 64)" ]; then
+	architecture="x86-64"
+elif [ -n "$(uname -m | grep 86)" ]; then
+	architecture="i386"
+elif [ -n "$(uname -m | grep arm)" ]; then
+	architecture="arm"
+else
+	ynh_die "Unable to detect your achitecture, please open a bug describing \
+        your hardware and the result of the command \"uname -m\"." 1
+fi
+
+# By default, the runner will use docker to run your builds. PR are welcomes to implement more executors
+docker_image="jboss/keycloak"
+port=$(ynh_find_port 31000)
+
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+ynh_script_progression --message="Storing installation settings..."
+
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=docker_image --value=$docker_image
+ynh_app_setting_set --app=$app --key=architecture --value=$architecture
+ynh_app_setting_set --app=$app --key=config_path --value=$config_path
+ynh_app_setting_set --app=$app --key=port --value=$port
+
+#=================================================
+# INSTALL DOCKER
+#=================================================
+ynh_script_progression --message="Installing dependencies..."
+
+if ! command_exists docker; then
+
+	ynh_install_extra_repo --repo="https://download.docker.com/linux/debian $(lsb_release -cs) stable" --key="https://download.docker.com/linux/debian/gpg" --name="${app}-docker"
+
+	ynh_install_app_dependencies $pkg_dependencies
+fi
+
+if ! command_exists docker-compose; then
+
+	curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+
+fi 
+
+#=================================================
+# SETUP FILES
+#=================================================
+ynh_script_progression --message="Setting up files..."
+
+cp ../conf/docker-compose.yml $config_path
+
+#=================================================
+# START KEYCLOAK
+#=================================================
+ynh_script_progression --message="Starting Keycloak..."
+
+pushd $config_path
+
+docker-compose up -d
+
+popd
+
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# ADVERTISE SERVICE IN ADMIN PANEL
+#=================================================
+
+yunohost service add $app
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --last

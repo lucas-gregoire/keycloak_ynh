@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+
+  keycloak:
+    image: jboss/keycloak
+    container_name: YNH_APP_main
+    environment:
+      DB_VENDOR: mysql
+      DB_ADDR: mysql
+      DB_DATABASE: ${MYSQL_DATABASE_KEYCLOAK}
+      DB_USER: ${MYSQL_USER_KEYCLOAK}
+      DB_PASSWORD: ${MYSQL_PASSWORD_KEYCLOAK}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      PROXY_ADDRESS_FORWARDING: 'true'
+    ports:
+      - "YNH_PORT:8080"
+    depends_on:
+      - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mysql:
+    image: mysql:8.0
+    container_name: YNH_APP_mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE_KEYCLOAK}
+      MYSQL_USER: ${MYSQL_USER_KEYCLOAK}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD_KEYCLOAK}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD_KEYCLOAK}
