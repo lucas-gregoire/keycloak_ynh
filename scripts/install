@@ -49,8 +49,10 @@ else
 fi
 
 # By default, the runner will use docker to run your builds. PR are welcomes to implement more executors
-docker_image="jboss/keycloak"
 port=$(ynh_find_port 31000)
+
+ynh_webpath_available $domain "/"
+ynh_webpath_register $app $domain "/"
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
@@ -58,7 +60,6 @@ port=$(ynh_find_port 31000)
 ynh_script_progression --message="Storing installation settings..."
 
 ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=docker_image --value=$docker_image
 ynh_app_setting_set --app=$app --key=architecture --value=$architecture
 ynh_app_setting_set --app=$app --key=config_path --value=$config_path
 ynh_app_setting_set --app=$app --key=port --value=$port
@@ -110,7 +111,11 @@ cp ../conf/docker-compose.yml $config_path
 # ADVERTISE SERVICE IN ADMIN PANEL
 #=================================================
 
+ynh_add_nginx_config
+
 yunohost service add $app
+
+ynh_app_setting_set $app skipped_uris "/"
 
 #=================================================
 # END OF SCRIPT
