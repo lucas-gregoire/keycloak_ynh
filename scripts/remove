@@ -19,26 +19,13 @@ app=$YNH_APP_INSTANCE_NAME
 config_path=$(ynh_app_setting_get --app=$app --key=config_path)
 
 #=================================================
-# STANDARD REMOVE
-#=================================================
-# REMOVE SERVICE FROM ADMIN PANEL
-#=================================================
-
-# Remove a service from the admin panel, added by `yunohost service add`
-if yunohost service status $app >/dev/null 2>&1
-then
-	ynh_script_progression --message="Removing $app service"
-	yunohost service remove $app
-fi
-
-#=================================================
 # REMOVE Keycloak
 #=================================================
 ynh_script_progression --message="Removing Keycloak"
 
 pushd $config_path
 
-docker-compose down
+docker-compose --log-level CRITICAL down
 
 popd 
 

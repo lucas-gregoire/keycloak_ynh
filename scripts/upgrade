@@ -47,16 +47,10 @@ ynh_script_progression --message="Updating Keycloak..."
 
 puhd $config_path
 
-docker-compose stop 
-docker-compose up -d 
+docker-compose --log-level CRITICAL stop 
+docker-compose --log-level CRITICAL up -d 
 
 popd
-
-#=================================================
-# ADVERTISE SERVICE IN ADMIN PANEL
-#=================================================
-
-yunohost service add $app
 
 #=================================================
 # END OF SCRIPT
