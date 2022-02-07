@@ -17,6 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Keycloak provides user federation, strong authentication, user management, fine-grained authorization, and more.
 
+
 **Shipped version:** 16.1.1~ynh1
 
 
@@ -29,6 +30,7 @@ Keycloak provides user federation, strong authentication, user management, fine-
 
 * You can configure the app by the admin panel of Keycloak.
 * The app runs inside a Docker container. It will install Docker on your system.
+* Users are not synced with YunoHost.
 
 ## Documentation and resources
 
