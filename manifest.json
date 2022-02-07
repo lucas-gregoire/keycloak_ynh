@@ -3,12 +3,12 @@
     "id": "keycloak",
     "packaging_format": 1,
     "description": {
-        "en": "Keycloak provides user federation, strong authentication, user management, fine-grained authorization, and more.",
-        "fr": "Keycloak fournit une solution de fédération d'utilisateurs avec authentification, autorisation, et plus."
+        "en": "User federation, strong authentication, user management, fine-grained authorization, and more.",
+        "fr": "Solution de fédération d'utilisateurs avec authentification, autorisation, et plus."
     },
     "version": "16.1.1~ynh1",
     "url": "https://www.keycloak.org",
-    "license": "Apache",
+    "license": "Apache-2.0",
     "maintainer": {
         "name": "Gildas GH",
         "email": "gildas@ecobosto.fr"
@@ -20,16 +20,17 @@
     "services": [
         "nginx"
     ],
+    "upstream": {
+        "license": "Apache-2.0",
+        "website": "https://keycloak.org",
+        "admindoc": "https://www.keycloak.org/docs/latest/server_admin/",
+        "code": "https://github.com/keycloak/keycloak"
+    },
     "arguments": {
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for Keycloak",
-                    "fr": "Choisissez un domaine pour Keycloak"
-                },
-                "example": "example.org"
+                "type": "domain"
             },
             {
                 "name": "username",
