@@ -40,7 +40,6 @@ test ! -e "$config_path" || ynh_die "This path already contains a folder"
 port=$(ynh_find_port 31000)
 rootpassword=$(ynh_string_random --length=12)
 
-ynh_webpath_available $domain "/"
 ynh_webpath_register $app $domain "/"
 
 #=================================================
