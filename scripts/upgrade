@@ -47,7 +47,7 @@ cp -r ../conf/theme $config_path
 #=================================================
 ynh_script_progression --message="Updating Keycloak..."
 
-puhd $config_path
+pushd $config_path
 
 docker-compose --log-level CRITICAL up -d 
 
