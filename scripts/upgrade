@@ -35,9 +35,8 @@ ynh_abort_if_errors
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..."
-
-ynh_install_app_dependencies $pkg_dependencies
+# ynh_script_progression --message="Upgrading dependencies..."
+# ynh_install_app_dependencies $pkg_dependencies
 
 cp -r ../conf/theme $config_path
 
