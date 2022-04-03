@@ -13,16 +13,18 @@ services:
       - DB_PASSWORD=${MYSQL_PASSWORD_KEYCLOAK}
       - KEYCLOAK_USER=${KEYCLOAK_USER}
       - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
-      - KEYCLOAK_FRONTEND_URL=${KEYCLOAK_FRONTEND_URL}
       - PROXY_ADDRESS_FORWARDING=true
+      - KEYCLOAK_DEFAULT_THEME=custom
+      - KEYCLOAK_WELCOME_THEME=custom
     ports:
-      - "YNH_PORT:8080"
+      - "8080:8080"
     depends_on:
       - mysql
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./theme:/opt/jboss/keycloak/themes/custom
+      - ./disable-theme-cache.cli:/opt/jboss/startup-scripts/disable-theme-cache.cli
+      - ../conf/theme:/opt/jboss/keycloak/themes/custom
 
   mysql:
     image: mysql:8.0
