@@ -82,6 +82,7 @@ dockerapp_ynh_findreplaceallvaribles
 
 cp ../conf/docker-compose.yml $config_path/docker-compose.yml
 cp ../conf/env.example $config_path/.env
+cp -r ../conf/theme $config_path
 
 #=================================================
 # START KEYCLOAK

@@ -39,6 +39,8 @@ ynh_script_progression --message="Upgrading dependencies..."
 
 ynh_install_app_dependencies $pkg_dependencies
 
+cp -r ../conf/theme $config_path
+
 
 #=================================================
 # UPGRADE KEYCLOAK
@@ -47,7 +49,6 @@ ynh_script_progression --message="Updating Keycloak..."
 
 puhd $config_path
 
-docker-compose --log-level CRITICAL stop 
 docker-compose --log-level CRITICAL up -d 
 
 popd
