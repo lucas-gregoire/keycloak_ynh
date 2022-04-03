@@ -6,7 +6,7 @@
         "en": "User federation, strong authentication, user management, fine-grained authorization, and more.",
         "fr": "Solution de fédération d'utilisateurs avec authentification, autorisation, et plus."
     },
-    "version": "16.1.1~ynh2",
+    "version": "16.1.1~ynh3",
     "url": "https://www.keycloak.org",
     "license": "Apache-2.0",
     "maintainer": {
