@@ -15,17 +15,23 @@ services:
        - KC_PROXY=edge
        - KC_HOSTNAME_STRICT=false
        - KC_HOSTNAME_URL=${KEYCLOAK_HOSTNAME_URL}
+       - KC_SPI_TRUSTSTORE_FILE_FILE=/opt/keycloak/conf/keycloak.jks
+       - KC_SPI_TRUSTSTORE_FILE_PASSWORD=${KEYCLOAK_KEYSTORE_PASSWORD}
+       - KC_SPI_TRUSTSTORE_FILE_HOSTNAME_VERIFICATION_POLICY=WILDCARD
 #      - KEYCLOAK_DEFAULT_THEME=custom
 #      - KEYCLOAK_WELCOME_THEME=custom
+    entrypoint: /bin/bash -c
     command:
-       - start
-       - --auto-build
+       - |
+          keytool -noprompt -import -trustcacerts -alias yunohost.org -file /opt/keycloak/conf/certs/yunohost.org -keystore /opt/keycloak/conf/keycloak.jks -storepass ${KEYCLOAK_KEYSTORE_PASSWORD}
+          /opt/keycloak/bin/kc.sh start --auto-build
     ports:
       - "127.0.0.1:YNH_PORT:8080"
     depends_on:
       - postgres
-#   volumes:
-#     - ./theme:/opt/jboss/keycloak/themes/custom
+    volumes:
+      - ./certs:/opt/keycloak/conf/certs
+#     - ./theme:/opt/keycloak/themes/custom
 
   postgres:
     image: postgres

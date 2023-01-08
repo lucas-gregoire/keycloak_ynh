@@ -40,6 +40,7 @@ ynh_abort_if_errors
 
 cp -r ../conf/theme $config_path
 
+echo | openssl s_client -connect localhost:636 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >$config_path/certs/yunohost.org.pem
 
 #=================================================
 # UPGRADE KEYCLOAK

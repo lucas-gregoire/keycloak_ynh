@@ -115,6 +115,7 @@ dockerapp_ynh_findreplaceallvaribles () {
     dockerapp_ynh_findreplacepath "YNH_DOMAIN" "$domain"
 	dockerapp_ynh_findreplacepath "YNH_USER_NAME" "$username"
 	dockerapp_ynh_findreplacepath "YNH_USER_PASSWORD" "$userpassword"
+	dockerapp_ynh_findreplacepath "YNH_KEYCLOAK_KEYSTORE_PASSWORD" "$(ynh_string_random --length=8)"
 }
 
 #=================================================
