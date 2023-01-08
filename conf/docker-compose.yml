@@ -3,34 +3,34 @@ version: '3.8'
 services:
 
   keycloak:
-    image: jboss/keycloak
+    image: quay.io/keycloak/keycloak
     container_name: YNH_APP_main
     environment:
-      - DB_VENDOR=mysql
-      - DB_ADDR=mysql
-      - DB_DATABASE=${MYSQL_DATABASE_KEYCLOAK}
-      - DB_USER=${MYSQL_USER_KEYCLOAK}
-      - DB_PASSWORD=${MYSQL_PASSWORD_KEYCLOAK}
-      - KEYCLOAK_USER=${KEYCLOAK_USER}
-      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
-      - KEYCLOAK_FRONTEND_URL=${KEYCLOAK_FRONTEND_URL}
-      - PROXY_ADDRESS_FORWARDING=true
-      - KEYCLOAK_DEFAULT_THEME=custom
-      - KEYCLOAK_WELCOME_THEME=custom
+       - KEYCLOAK_ADMIN=${KEYCLOAK_USER}
+       - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PASSWORD}
+       - KC_DB=postgres
+       - KC_DB_URL=jdbc:postgresql://postgres/${POSTGRES_DATABASE_KEYCLOAK}
+       - KC_DB_USERNAME=${POSTGRES_USER_KEYCLOAK}
+       - KC_DB_PASSWORD=${POSTGRES_PASSWORD_KEYCLOAK}
+       - KC_PROXY=edge
+       - KC_HOSTNAME_STRICT=false
+       - KC_HOSTNAME_URL=${KEYCLOAK_HOSTNAME_URL}
+#      - KEYCLOAK_DEFAULT_THEME=custom
+#      - KEYCLOAK_WELCOME_THEME=custom
+    command:
+       - start
+       - --auto-build
     ports:
-      - "YNH_PORT:8080"
+      - "127.0.0.1:YNH_PORT:8080"
     depends_on:
-      - mysql
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ./theme:/opt/jboss/keycloak/themes/custom
+      - postgres
+#   volumes:
+#     - ./theme:/opt/jboss/keycloak/themes/custom
 
-  mysql:
-    image: mysql:8.0
-    container_name: YNH_APP_mysql
+  postgres:
+    image: postgres
+    container_name: YNH_APP_postgres
     environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE_KEYCLOAK}
-      - MYSQL_USER=${MYSQL_USER_KEYCLOAK}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD_KEYCLOAK}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_KEYCLOAK}
+      - POSTGRES_DB=${POSTGRES_DATABASE_KEYCLOAK}
+      - POSTGRES_USER=${POSTGRES_USER_KEYCLOAK}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_KEYCLOAK}
