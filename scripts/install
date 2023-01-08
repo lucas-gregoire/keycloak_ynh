@@ -83,6 +83,7 @@ dockerapp_ynh_findreplaceallvaribles
 cp ../conf/docker-compose.yml $config_path/docker-compose.yml
 cp ../conf/env.example $config_path/.env
 cp -r ../conf/theme $config_path
+cp -r ../conf/realms $config_path
 
 mkdir -p $config_path/certs
 echo | openssl s_client -connect localhost:636 2>&1 | sed --quiet '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >$config_path/certs/yunohost.org.pem
