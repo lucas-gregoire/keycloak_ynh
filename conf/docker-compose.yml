@@ -33,8 +33,8 @@ services:
       - "yunohost.org:host-gateway"
     volumes:
       - ./certs:/opt/keycloak/conf/certs
-      - ./realms:/opt/keycloak/data/import
       - ./theme:/opt/keycloak/themes/custom
+      - ${KEYCLOAK_REALMS_PATH}:${KEYCLOAK_DATA_IMPORT_PATH}
 
   postgres:
     image: postgres

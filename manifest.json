@@ -27,7 +27,7 @@
         "code": "https://github.com/keycloak/keycloak"
     },
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain"
@@ -47,6 +47,15 @@
                 "ask": {
                     "en": "Choose an admin password",
                     "fr": "Choisissez le mot de passe administrateur"
+                }
+            },
+            {
+                "name": "importdefaultrealm",
+                "type": "boolean",
+                "default": true,
+                "ask": {
+                    "en": "Import the default realm",
+                    "fr": "Importer le realm par défaut"
                 }
             }
         ]

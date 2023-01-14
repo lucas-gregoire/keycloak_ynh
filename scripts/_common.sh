@@ -111,11 +111,19 @@ dockerapp_ynh_findreplacepath () {
 # find replace all variables
 dockerapp_ynh_findreplaceallvaribles () {
 	dockerapp_ynh_findreplacepath "YNH_APP" "$app"
-    dockerapp_ynh_findreplacepath "YNH_PORT" "$port"
-    dockerapp_ynh_findreplacepath "YNH_DOMAIN" "$domain"
+	dockerapp_ynh_findreplacepath "YNH_PORT" "$port"
+	dockerapp_ynh_findreplacepath "YNH_DOMAIN" "$domain"
 	dockerapp_ynh_findreplacepath "YNH_USER_NAME" "$username"
 	dockerapp_ynh_findreplacepath "YNH_USER_PASSWORD" "$userpassword"
 	dockerapp_ynh_findreplacepath "YNH_DB_PASSWORD" "$(ynh_string_random --length=12)"
+
+	if [ "$importdefaultrealm" = 1 ]; then
+		dockerapp_ynh_findreplacepath "YNH_KEYCLOAK_REALMS_PATH" "./realms"
+		dockerapp_ynh_findreplacepath "YNH_KEYCLOAK_DATA_IMPORT_PATH" "/opt/keycloak/data/import"
+	else
+		dockerapp_ynh_findreplacepath "YNH_KEYCLOAK_REALMS_PATH" "/dev/null"
+		dockerapp_ynh_findreplacepath "YNH_KEYCLOAK_DATA_IMPORT_PATH" "/tmp/dev-null"
+	fi
 	dockerapp_ynh_findreplacepath "YNH_KEYCLOAK_KEYSTORE_PASSWORD" "$(ynh_string_random --length=12)"
 }
 
